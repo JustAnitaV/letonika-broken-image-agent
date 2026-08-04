@@ -1,1 +1,38 @@
+name: Check broken images
 
+on:
+  workflow_dispatch:
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+
+    env:
+      LETONIKA_USER: ${{ secrets.LETONIKA_USER }}
+      LETONIKA_PASSWORD: ${{ secrets.LETONIKA_PASSWORD }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Install Playwright
+        run: npx playwright install --with-deps
+
+      - name: Run scanner
+        run: node src/scan-events.js
+
+      - name: Upload report
+        uses: actions/upload-artifact@v4
+        with:
+          name: scan-results
+          path: |
+            reports/
+            screenshots/
