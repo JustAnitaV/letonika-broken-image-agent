@@ -322,7 +322,7 @@ async function scan() {
 
   // Initialize CSV with header if not exists
   if (!fs.existsSync(REPORT_CSV)) {
-    fs.writeFileSync(REPORT_CSV, 'EventID,Title,ImageURL\n', 'utf8');
+    fs.writeFileSync(REPORT_CSV, 'EventID,EventDate,Title,ImageURL,Reason\n', 'utf8');
   }
 
   const browser = await chromium.launch({ headless: true });
