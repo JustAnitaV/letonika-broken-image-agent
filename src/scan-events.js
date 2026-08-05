@@ -31,8 +31,15 @@ function csvEscape(value) {
   return s;
 }
 
-async function appendCsvRow(eventId, title, imageUrl) {
-  const line = [eventId, title || '', imageUrl || ''].map(csvEscape).join(',') + '\n';
+async function appendCsvRow(eventId, eventDate, title, imageUrl, reason) {
+  const line = [
+    eventId,
+    eventDate || '',
+    title || '',
+    imageUrl || '',
+    reason || ''
+  ].map(csvEscape).join(',') + '\n';
+ 
   fs.appendFileSync(REPORT_CSV, line, 'utf8');
 }
 
