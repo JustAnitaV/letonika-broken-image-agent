@@ -75,6 +75,85 @@ async function clickFirstAvailable(page, selectors) {
   return false;
 }
 
+async function collectImageUrlsInFrame(frame, page) {
+  try {
+    const srcs = await frame.$$eval('img', (nodes) =>
+      nodes.map((img) => img.getAttribute('src') || img.src || '')
+    );
+ 
+    const urls = [];
+ 
+    for (const raw of srcs) {
+      if (!raw) continue;
+ 
+      const trimmed = raw.trim();
+      if (!trimmed) continue;
+ 
+      if (
+        trimmed.startsWith('data:') ||
+        trimmed.startsWith('blob:') ||
+        trimmed.startsWith('javascript:') ||
+        trimmed.startsWith('about:')
+      ) {
+        continue;
+      }
+ 
+      try {
+        const base = frame.url() || page.url();
+        const absoluteUrl = new URL(trimmed, base).href;
+        urls.push(absoluteUrl);
+      } catch (e) {
+        // skip invalid URLs
+      }
+    }
+ 
+    return urls;
+  } catch (e) {
+    return [];
+  }
+}
+ 
+function reasonFromStatus(status) {
+  if (status === 403) return 'HTTP_403';
+  if (status === 404) return 'HTTP_404';
+  if (status >= 500 && status < 600) return 'HTTP_500';
+  return `HTTP_${status}`;
+}
+ 
+async function checkImageUrl(context, imageUrl) {
+  try {
+    const response = await context.request.get(imageUrl);
+ 
+    if (!response) {
+      return {
+        broken: true,
+        reason: 'REQUEST_ERROR',
+      };
+    }
+ 
+    const status = response.status();
+ 
+    if (status >= 400) {
+      return {
+        broken: true,
+        reason: reasonFromStatus(status),
+      };
+    }
+ 
+    return {
+      broken: false,
+      reason: '',
+    };
+  } catch (e) {
+    return {
+      broken: true,
+      reason: 'REQUEST_ERROR',
+    };
+  }
+}
+
+
+
 async function extractEventDate(page) {
   try {
     // Run DOM logic inside the page to reliably locate the "Notikuma datums" container
