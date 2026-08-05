@@ -134,7 +134,7 @@ function reasonFromStatus(status) {
 async function checkImageUrl(context, imageUrl) {
   try {
     const response = await context.request.get(imageUrl);
-    console.log(`Checking image: ${imageUrl}`);
+    // console.log(`Checking image: ${imageUrl}`);
  
     if (!response) {
       return {
