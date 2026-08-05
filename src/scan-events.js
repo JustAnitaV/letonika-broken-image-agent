@@ -235,7 +235,7 @@ async function scan() {
   await page.goto('https://letonika.lv/editor/FrontPageEditor.aspx?type=Events', { timeout: 60000 });
 
   const START_ID = 1;
-  const END_ID = 6000;
+  const END_ID = 100;
 
   let processed = 0;
   for (let id = START_ID; id <= END_ID; id++) {
