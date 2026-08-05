@@ -229,33 +229,7 @@ async function getTitleFromPage(page) {
   return null;
 }
 
-async function findBrokenImagesInFrame(frame) {
-  try {
-    const imgs = await frame.$$eval('img', (nodes) =>
-      nodes.map((img) => {
-        return {
-          src: img.src || img.getAttribute('src') || '',
-          complete: !!img.complete,
-          naturalWidth: img.naturalWidth || 0,
-          naturalHeight: img.naturalHeight || 0,
-        };
-      })
-    );
 
-    const broken = imgs
-      .map((i) => ({
-        src: i.src,
-        broken: !i.complete || i.naturalWidth === 0 || i.naturalHeight === 0,
-      }))
-      .filter((i) => i.src && i.broken);
-
-    // Normalize URLs to absolute using frame's location
-    const normalized = broken.map((b) => ({ src: b.src }));
-    return normalized;
-  } catch (e) {
-    return [];
-  }
-}
 
 async function scan() {
   await ensureDirs();
