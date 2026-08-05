@@ -410,12 +410,23 @@ async function scan() {
         continue;
       }
 
-      // Collect broken images across all frames (main document + iframes)
+      // Collect image URLs across all frames
       const allBroken = [];
       const frames = page.frames();
+ 
       for (const frame of frames) {
-        const brokenInFrame = await findBrokenImagesInFrame(frame);
-        for (const b of brokenInFrame) allBroken.push(b.src);
+        const imageUrls = await collectImageUrlsInFrame(frame, page);
+ 
+        for (const imageUrl of imageUrls) {
+          const result = await checkImageUrl(context, imageUrl);
+ 
+          if (result.broken) {
+            allBroken.push({
+              src: imageUrl,
+              reason: result.reason
+            });
+          }
+        }
       }
 
       if (allBroken.length > 0) {
