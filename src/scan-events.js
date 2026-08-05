@@ -416,6 +416,7 @@ async function scan() {
         if (processed % 100 === 0) console.log(`Processed ${processed}/${END_ID - START_ID + 1} (last id ${id}) -- no title found, skipping`);
         continue;
       }
+      const eventDate = await extractEventDate(page);
 
       // Collect image URLs across all frames
       const allBroken = [];
