@@ -234,8 +234,8 @@ async function scan() {
   console.log('Opening Events editor...');
   await page.goto('https://letonika.lv/editor/FrontPageEditor.aspx?type=Events', { timeout: 60000 });
 
-  const START_ID = 1;
-  const END_ID = 100;
+  const START_ID = 3965;
+  const END_ID = 3980;
 
   let processed = 0;
   for (let id = START_ID; id <= END_ID; id++) {
