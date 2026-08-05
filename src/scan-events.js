@@ -443,8 +443,15 @@ async function scan() {
         await page.screenshot({ path: screenshotPath, fullPage: true });
 
         // Append all broken images to CSV
+    
         for (const img of allBroken) {
-          await appendCsvRow(id, title, img);
+          await appendCsvRow(
+            id,
+            eventDate,
+            title,
+            img.src,
+            img.reason
+          );
         }
 
         console.log(`ID ${id}: Found ${allBroken.length} broken image(s) — saved screenshot to ${screenshotPath}`);
