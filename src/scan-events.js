@@ -108,6 +108,10 @@ async function collectImageUrlsInFrame(frame, page) {
       try {
         const base = frame.url() || page.url();
         const absoluteUrl = new URL(trimmed, base).href;
+        // Skip TinyMCE editor icons
+        if (absoluteUrl.includes('/editor/tinymce/')) {
+          continue;
+        }
         urls.push(absoluteUrl);
       } catch (e) {
         // skip invalid URLs
