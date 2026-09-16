@@ -33,6 +33,7 @@ Environment variables
 
 - LETONIKA_USER - Letonika username
 - LETONIKA_PASSWORD - Letonika password
+- DO NOT WRITE THESE CREDENTIALS HERE - KEEP AS A SECRET
 
 Usage
 
