@@ -67,3 +67,4 @@ Notes
 
 - The scanner uses heuristics to locate login fields and the event title; if the Letonika editor changes its DOM, you may need to adjust selectors in `src/scan-events.js`.
 - Be polite when scanning a remote site. Consider adding delays or running smaller ID ranges if necessary.
+- AI generated
